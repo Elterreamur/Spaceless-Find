@@ -1,1 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spaceless Find - Light Novel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+  <header class="navbar">
+    <a href="#" class="logo" onclick="showHome()">Spaceless Find</a>
+
+    <nav>
+      <button onclick="showHome()">Beranda</button>
+      <button onclick="showLibrary()">Novel</button>
+      <button onclick="showEditor()">Editor</button>
+    </nav>
+
+    <div class="account-area">
+      <span id="userLabel"></span>
+      <button id="loginButton" class="primary" onclick="openModal('loginModal')">
+        Login
+      </button>
+      <button id="logoutButton" class="danger hidden" onclick="logout()">
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <main id="app"></main>
+
+  <footer>
+    <p>© 2026 Spaceless Find · Platform berbagi karya Light Novel</p>
+  </footer>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-box">
+      <button class="close" onclick="closeModal('loginModal')">&times;</button>
+      <h2>Login</h2>
+
+      <form onsubmit="login(event)">
+        <label>Email</label>
+        <input id="loginEmail" type="email" required>
+
+        <label>Password</label>
+        <input id="loginPassword" type="password" required>
+
+        <button class="primary full" type="submit">Login</button>
+      </form>
+
+      <p class="modal-link">
+        Belum punya akun?
+        <button onclick="switchModal('loginModal', 'registerModal')">
+          Register
+        </button>
+      </p>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div id="registerModal" class="modal">
+    <div class="modal-box">
+      <button class="close" onclick="closeModal('registerModal')">&times;</button>
+      <h2>Register</h2>
+
+      <form onsubmit="register(event)">
+        <label>Nama pengguna</label>
+        <input id="registerName" type="text" required>
+
+        <label>Email</label>
+        <input id="registerEmail" type="email" required>
+
+        <label>Password</label>
+        <input id="registerPassword" type="password" minlength="6" required>
+
+        <button class="primary full" type="submit">Buat Akun</button>
+      </form>
+
+      <p class="modal-link">
+        Sudah punya akun?
+        <button onclick="switchModal('registerModal', 'loginModal')">
+          Login
+        </button>
+      </p>
+    </div>
+  </div>
+
+  <!-- Story Modal -->
+  <div id="storyModal" class="modal">
+    <div class="modal-box large">
+      <button class="close" onclick="closeModal('storyModal')">&times;</button>
+      <h2 id="storyModalTitle">Tambah Novel</h2>
+
+      <form onsubmit="saveStory(event)">
+        <input id="storyId" type="hidden">
+
+        <label>Judul novel</label>
+        <input id="storyTitle" type="text" required placeholder="Contoh: The Last Mage">
+
+        <label>Sinopsis</label>
+        <textarea id="storySynopsis" rows="5" required></textarea>
+
+        <label>URL cover novel</label>
+        <input id="storyCover" type="url"
+          placeholder="https://contoh.com/cover.jpg">
+
+        <label>Genre</label>
+        <div id="genreOptions" class="genre-options"></div>
+
+        <button class="primary full" type="submit">Simpan Novel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Chapter Modal -->
+  <div id="chapterModal" class="modal">
+    <div class="modal-box large">
+      <button class="close" onclick="closeModal('chapterModal')">&times;</button>
+      <h2 id="chapterModalTitle">Tambah Chapter</h2>
+
+      <form onsubmit="saveChapter(event)">
+        <input id="chapterId" type="hidden">
+        <input id="chapterStoryId" type="hidden">
+
+        <label>Judul chapter</label>
+        <input id="chapterTitle" type="text" required>
+
+        <label>Isi chapter</label>
+
+        <div class="editor-toolbar">
+          <button type="button" onclick="formatText('bold')"><b>B</b></button>
+          <button type="button" onclick="formatText('italic')"><i>I</i></button>
+          <button type="button" onclick="formatText('underline')"><u>U</u></button>
+          <button type="button" onclick="formatText('formatBlock', 'h2')">H2</button>
+          <button type="button" onclick="formatText('formatBlock', 'p')">P</button>
+          <button type="button" onclick="formatText('insertUnorderedList')">List</button>
+          <button type="button" onclick="formatText('justifyLeft')">Kiri</button>
+          <button type="button" onclick="formatText('justifyCenter')">Tengah</button>
+          <button type="button" onclick="formatText('justifyRight')">Kanan</button>
+        </div>
+
+        <div id="chapterContent"
+             class="rich-editor"
+             contenteditable="true"
+             oninput="autoSaveChapter()"></div>
+
+        <p id="autoSaveStatus" class="save-status">Belum ada perubahan</p>
+
+        <button class="primary full" type="submit">Simpan Chapter</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
